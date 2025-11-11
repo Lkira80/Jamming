@@ -6,12 +6,9 @@ import "./App.css";
 import Spotify from "./utils/Spotify";
 
 function App() {
-  /* Hardcoding some example tracks */
-  const [searchResults, setSearchResults] = useState([
-    { id: 1, name: "Shape of You", artist: "Ed Sheeran", album: "Divide", uri: "spotify:track:1" },
-    { id: 2, name: "Blinding Lights", artist: "The Weeknd", album: "After Hours", uri: "spotify:track:2" },
-    { id: 3, name: "Levitating", artist: "Dua Lipa", album: "Future Nostalgia", uri: "spotify:track:3" },
-  ]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [playlistName, setPlaylistName] = useState('New Playlist');
+  const [playlistTracks, setPlaylistTracks] = useState([]);
 
   const addTrack = (track) => {
     if (!playlistTracks.find((t) => t.id === track.id)) {
@@ -38,11 +35,6 @@ function App() {
     setPlaylistName("New Playlist");
     setPlaylistTracks([]);
   }
-
-  const [playlistName, setPlaylistName] = useState('New Playlist');
-  const [playlistTracks, setPlaylistTracks] = useState([]);
-
-
 
   return (
     <div className="App">
