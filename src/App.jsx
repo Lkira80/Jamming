@@ -28,16 +28,12 @@ function App() {
     setSearchResults(results);
 };
 
-  const savePlaylist = async () => {
-    const trackURIs = playlistTracks.map(track => track.uri);
+    const savePlaylist = async () => {
+    const trackURIs = playlistTracks.map((t) => t.uri);
     await Spotify.savePlaylist(playlistName, trackURIs);
-
-    console.log("Playlist saved with tracks:", trackURIs);
-    alert(`Playlist saved with tracks:\n${trackURIs.join("\n")}`);
-
     setPlaylistName("New Playlist");
     setPlaylistTracks([]);
-  }
+  };
 
   return (
     <div className="App">
