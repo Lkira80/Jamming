@@ -112,7 +112,7 @@ const Spotify = {
 
     
 
-    const playlistRes = await fetch(`https://api.spotify.com/v1/users/${user}/playlists`, {
+    const playlistRes = await fetch(`https://api.spotify.com/v1/users/me/playlists`, {
       method: "POST",
       headers,
       body: JSON.stringify({ name }),
