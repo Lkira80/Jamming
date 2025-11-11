@@ -11,8 +11,6 @@ function App() {
   const [playlistName, setPlaylistName] = useState("New Playlist");
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
-  console.log("Render de App");
-
   const addTrack = (track) => {
     if (!playlistTracks.find((t) => t.id === track.id)) {
       setPlaylistTracks([...playlistTracks, track]);
