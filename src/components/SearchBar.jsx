@@ -8,7 +8,6 @@ function SearchBar({ onSearch }) {
     };
 
     const search = () => {
-        if (!term) return;
         onSearch(term);
     };
 
