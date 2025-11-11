@@ -1,10 +1,10 @@
 const clientId = "599c99487c2d4ac78eaf8d0cbeed6482"; 
-const redirectUri = "https://Lkira80.github.io/jammming/";
+const redirectUri = "https://Lkira80.github.io/jamming/";
 let accessToken;
 let expiresIn;
 
 const Spotify = {
-  getAccessToken() {
+  getAccessToken() {s
     if (accessToken) return accessToken;
 
     const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
