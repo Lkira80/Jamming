@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import Playlist from "./components/Playlist";
 import "./App.css";
 import Spotify from "./utils/Spotify";
 
+
 function App() {
   const [searchResults, setSearchResults] = useState([]);
-  const [playlistName, setPlaylistName] = useState('New Playlist');
+  const [playlistName, setPlaylistName] = useState("New Playlist");
   const [playlistTracks, setPlaylistTracks] = useState([]);
+
+  console.log("Render de App");
 
   const addTrack = (track) => {
     if (!playlistTracks.find((t) => t.id === track.id)) {
@@ -21,10 +24,10 @@ function App() {
   };
 
   const handleSearch = async (term) => {
-  console.log("Buscando:", term);
-  const results = await Spotify.search(term);
-  console.log("Resultados:", results);
-  setSearchResults(results);
+    console.log("Buscando:", term);
+    const results = await Spotify.search(term);
+    console.log("Resultados:", results);
+    setSearchResults(results);
 };
 
   const savePlaylist = async () => {
@@ -41,9 +44,9 @@ function App() {
   return (
     <div className="App">
       <h1>Jamming</h1>
-      <SearchBar onSearch={handleSearch}/>
+      <SearchBar onSearch={handleSearch} />
       <div className="App-content">
-        <SearchResults tracks={searchResults} addTrack={addTrack}/>
+        <SearchResults tracks={searchResults} addTrack={addTrack} />
         <Playlist
           playlistName={playlistName}
           setPlaylistName={setPlaylistName}
