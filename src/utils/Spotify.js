@@ -15,24 +15,20 @@ const Spotify = {
       accessToken = match[1];
       const expiresIn = Number(expires[1]) * 1000;
 
-  
       setTimeout(() => (accessToken = ""), expiresIn);
 
       window.history.pushState({}, null, redirectUri);
 
       return accessToken;
     } else {
-      const authUrl = new URL("https://accounts.spotify.com/authorize");
-      authUrl.searchParams.append("client_id", clientId);
-      authUrl.searchParams.append("response_type", "token");
-      authUrl.searchParams.append("redirect_uri", redirectUri);
-      authUrl.searchParams.append("scope", scope);
-
-      window.location = authUrl.toString();
+      const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=${scope}&redirect_uri=${redirectUri}`;
+      window.location = authUrl;
     }
   },
 
   async search(term) {
+    if (!term) return [];
+
     const token = Spotify.getAccessToken();
     if (!token) return [];
 
@@ -40,8 +36,8 @@ const Spotify = {
     const response = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    const jsonResponse = await response.json();
 
+    const jsonResponse = await response.json();
     if (!jsonResponse.tracks) return [];
 
     return jsonResponse.tracks.items.map((track) => ({
@@ -54,12 +50,16 @@ const Spotify = {
   },
 
   async savePlaylist(name, uris) {
-    if (!name || !uris.length) return;
+    if (!name || !uris.length) return [];
 
     const token = Spotify.getAccessToken();
-    if (!token) return;
+    if (!token) return [];
 
-    const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+
 
     const meResponse = await fetch("https://api.spotify.com/v1/me", { headers });
     const user = await meResponse.json();
