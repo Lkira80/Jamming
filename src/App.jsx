@@ -3,6 +3,7 @@ import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import Playlist from "./components/Playlist";
 import "./App.css";
+import Spotify from "./utils/Spotify";
 
 function App() {
   /* Hardcoding some example tracks */
@@ -11,18 +12,6 @@ function App() {
     { id: 2, name: "Blinding Lights", artist: "The Weeknd", album: "After Hours", uri: "spotify:track:2" },
     { id: 3, name: "Levitating", artist: "Dua Lipa", album: "Future Nostalgia", uri: "spotify:track:3" },
   ]);
-
-  const savePlaylist = () => {
-    const trackURIs = playlistTracks.map(track => track.uri);
-
-    console.log("Playlist saved with tracks:", trackURIs);
-    alert(`Playlist saved with tracks:\n${trackURIs.join("\n")}`);
-
-    setPlaylistName("New Playlist");
-    setPlaylistTracks([]);
-  }
-  const [playlistName, setPlaylistName] = useState('New Playlist');
-  const [playlistTracks, setPlaylistTracks] = useState([]);
 
   const addTrack = (track) => {
     if (!playlistTracks.find((t) => t.id === track.id)) {
@@ -33,6 +22,27 @@ function App() {
   const removeTrack = (track) => {
     setPlaylistTracks(playlistTracks.filter((t) => t.id !== track.id));
   };
+
+  const handleSearch = async (term) => {
+    const results = await Spotify.search(term);
+    setSearchResults(results);
+  }
+
+  const savePlaylist = async () => {
+    const trackURIs = playlistTracks.map(track => track.uri);
+    await Spotify.savePlaylist(playlistName, trackURIs);
+
+    console.log("Playlist saved with tracks:", trackURIs);
+    alert(`Playlist saved with tracks:\n${trackURIs.join("\n")}`);
+
+    setPlaylistName("New Playlist");
+    setPlaylistTracks([]);
+  }
+
+  const [playlistName, setPlaylistName] = useState('New Playlist');
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+
+
 
   return (
     <div className="App">
