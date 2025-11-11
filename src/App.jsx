@@ -21,9 +21,11 @@ function App() {
   };
 
   const handleSearch = async (term) => {
-    const results = await Spotify.search(term);
-    setSearchResults(results);
-  }
+  console.log("Buscando:", term);
+  const results = await Spotify.search(term);
+  console.log("Resultados:", results);
+  setSearchResults(results);
+};
 
   const savePlaylist = async () => {
     const trackURIs = playlistTracks.map(track => track.uri);
