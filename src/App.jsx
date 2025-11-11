@@ -47,7 +47,7 @@ function App() {
   return (
     <div className="App">
       <h1>Jamming</h1>
-      <SearchBar />
+      <SearchBar onSearch={handleSearch}/>
       <div className="App-content">
         <SearchResults tracks={searchResults} addTrack={addTrack}/>
         <Playlist
