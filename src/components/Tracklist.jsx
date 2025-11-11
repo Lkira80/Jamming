@@ -1,10 +1,10 @@
 import React from "react";
 import Track from "./Track";
 
-function Tracklist({ tracks, addTrack }) {
+function Tracklist({ tracks, addTrack, removeTrack, isRemoval }) {
     return (
         <div className="Tracklist">
-            {tracks.map((track) => (
+            return {tracks.map((track) => (
                 <Track
                 key={track.id}
                 name={track.name}
@@ -12,6 +12,8 @@ function Tracklist({ tracks, addTrack }) {
                 album={track.album}
                 track={track}
                 addTrack={addTrack}
+                removeTrack={removeTrack}
+                isRemoval={isRemoval}
                 />
             ))}
         </div>
