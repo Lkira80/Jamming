@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://lkira80.github.io/jammming",
+  "homepage": "https://lkira80.github.io/jamming",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
