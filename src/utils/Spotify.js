@@ -32,8 +32,6 @@ const Spotify = {
     if (storedToken && Date.now() < storedExpiry) {
       accessToken = storedToken;
       return accessToken;
-    } else {
-      localStorage.removeItem("spotify_access_token");
     }
 
     const code = new URLSearchParams(window.location.search).get("code");
@@ -109,12 +107,9 @@ const Spotify = {
     const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
 
     const me = await fetch("https://api.spotify.com/v1/me", { headers });
-    const userData = await me.json();
-    const user = userData.id;
+    const user = await me.json();
 
-    
-
-    const playlistRes = await fetch(`https://api.spotify.com/v1/users/${user}/playlists`, {
+    const playlistRes = await fetch(`https://api.spotify.com/v1/users/${user.id}/playlists`, {
       method: "POST",
       headers,
       body: JSON.stringify({ name }),
