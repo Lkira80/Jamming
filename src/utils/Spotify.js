@@ -15,11 +15,11 @@ const Spotify = {
       expiresIn = Number(expiresInMatch[1]);
 
       window.setTimeout(() => (accessToken = ""), expiresIn * 1000);
-      window.history.pushState("Access Token", null, "/");
+      window.history.pushState("Access Token", null, "/Jamming/");
 
       return accessToken;
     } else {
-      const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
+      const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${encodeURIComponent(redirectUri)}`;
       window.location = authUrl;
     }
   },
