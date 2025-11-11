@@ -12,6 +12,15 @@ function App() {
     { id: 3, name: "Levitating", artist: "Dua Lipa", album: "Future Nostalgia" },
   ]);
 
+  const [playlistName, setPlaylistName] = useState('New Playlist');
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+
+  const addTrack = (track) => {
+    if (!playlistTracks.find((t) => t.id === track.id)) {
+      setPlaylistTracks([...playlistTracks, track]);
+    }
+  };
+
   return (
     <div className="App">
       <h1>Jamming</h1>

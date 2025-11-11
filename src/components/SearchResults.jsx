@@ -5,7 +5,7 @@ function SearchResults({ tracks }) {
     return (
         <div className="SearchResults">
             <h2>Results</h2>
-            <Tracklist tracks={tracks} />
+            <Tracklist tracks={tracks} addTrack={addTrack} />
         </div>
     );
 }
