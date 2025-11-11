@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Tracklist from "./Tracklist";
 
-function Playlist({ playlistName, setPlaylistName, playlistTracks, removeTrack }) {
+function Playlist({ playlistName, setPlaylistName, playlistTracks, removeTrack, savePlaylist }) {
     const [isEditing, setIsEditing] = useState(false);
     const [tempName, setTempName] = useState(playlistName);
     
@@ -33,13 +33,13 @@ function Playlist({ playlistName, setPlaylistName, playlistTracks, removeTrack }
                 value={tempName}
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
-                onKeyPress={handleInputKeyPress}
+                onKeyDown={handleInputKeyPress}
             />
            ) : (
             <h2 onClick={handleTitleClick}>{playlistName}</h2>
            )}
             <Tracklist tracks={playlistTracks} removeTrack={removeTrack} isRemoval={true}/>
-            <button>Save to Spotify</button>
+            <button onClick={savePlaylist}>Save to Spotify</button>
         </div>
     );
 }

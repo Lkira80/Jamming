@@ -7,11 +7,20 @@ import "./App.css";
 function App() {
   /* Hardcoding some example tracks */
   const [searchResults, setSearchResults] = useState([
-    { id: 1, name: "Shape of You", artist: "Ed Sheeran", album: "Divide" },
-    { id: 2, name: "Blinding Lights", artist: "The Weeknd", album: "After Hours" },
-    { id: 3, name: "Levitating", artist: "Dua Lipa", album: "Future Nostalgia" },
+    { id: 1, name: "Shape of You", artist: "Ed Sheeran", album: "Divide", uri: "spotify:track:1" },
+    { id: 2, name: "Blinding Lights", artist: "The Weeknd", album: "After Hours", uri: "spotify:track:2" },
+    { id: 3, name: "Levitating", artist: "Dua Lipa", album: "Future Nostalgia", uri: "spotify:track:3" },
   ]);
 
+  const savePlaylist = () => {
+    const trackURIs = playlistTracks.map(track => track.uri);
+
+    console.log("Playlist saved with tracks:", trackURIs);
+    alert(`Playlist saved with tracks:\n${trackURIs.join("\n")}`);
+
+    setPlaylistName("New Playlist");
+    setPlaylistTracks([]);
+  }
   const [playlistName, setPlaylistName] = useState('New Playlist');
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
@@ -36,6 +45,7 @@ function App() {
           setPlaylistName={setPlaylistName}
           playlistTracks={playlistTracks}
           removeTrack={removeTrack}
+          savePlaylist={savePlaylist}
         />
       </div>
     </div>

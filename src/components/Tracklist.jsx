@@ -4,7 +4,7 @@ import Track from "./Track";
 function Tracklist({ tracks, addTrack, removeTrack, isRemoval }) {
     return (
         <div className="Tracklist">
-            return {tracks.map((track) => (
+            {tracks.map((track) => (
                 <Track
                 key={track.id}
                 name={track.name}
