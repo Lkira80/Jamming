@@ -1,5 +1,5 @@
 const clientId = "599c99487c2d4ac78eaf8d0cbeed6482"; 
-const redirectUri = "https://Lkira80.github.io/jamming/";
+const redirectUri = "https://github.com/Lkira80/Jamming";
 let accessToken;
 let expiresIn;
 
