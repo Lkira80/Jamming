@@ -11,11 +11,6 @@ function App() {
   const [playlistName, setPlaylistName] = useState("New Playlist");
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
-  if (!localStorage.getItem("spotify_code_verifier")) {
-  const verifier = Spotify.generateRandomString(128);
-  localStorage.setItem("spotify_code_verifier", verifier);
-}
-
   const addTrack = (track) => {
     if (!playlistTracks.find((t) => t.id === track.id)) {
       setPlaylistTracks([...playlistTracks, track]);

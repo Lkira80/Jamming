@@ -34,15 +34,18 @@ const Spotify = {
       accessToken = storedToken;
       return accessToken;
     }
-    localStorage.removeItem("spotify_access_token");
+    
+    /*Obtaining code from URL*/
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
 
-    /*Check if theres a code in URL*/
-    const code = new URLSearchParams(window.location.search).get("code");
+    /*If there is a code in URL, try to use*/
     if (code) {
       const verifier = localStorage.getItem("spotify_code_verifier");
       if (!verifier) {
-        console.error("No se encontró code_verifier en localStorage.");
-        return null;
+        console.warn("No se encontró code_verifier. Reiniciando flujo de autorización...");
+        window.history.replaceState({}, document.title, redirectUri);
+        return this.getAccessToken();
       }
 
       /*Changing code for access_token*/
@@ -67,11 +70,12 @@ const Spotify = {
         localStorage.setItem("spotify_access_token", accessToken);
         localStorage.setItem("spotify_token_expiry", Date.now() + data.expires_in * 1000);
         /*Cleaning URL*/
-        window.history.pushState({}, null, redirectUri);
+        window.history.replaceState({}, document.title, redirectUri);
         return accessToken;
       } else {
         console.error("Error al obtener el token:", data);
-        return null;
+        window.history.replaceState({}, document.title, redirectUri);
+        return this.getAccessToken();
       }
     }
 
@@ -81,8 +85,8 @@ const Spotify = {
       verifier = generateRandomString(128);
       localStorage.setItem("spotify_code_verifier", verifier);
     }
-    const challenge = await sha256(verifier);
 
+    const challenge = await sha256(verifier);
     const authUrl = new URL("https://accounts.spotify.com/authorize");
     authUrl.searchParams.append("client_id", clientId);
     authUrl.searchParams.append("response_type", "code");
@@ -92,7 +96,6 @@ const Spotify = {
     authUrl.searchParams.append("code_challenge", challenge);
 
     window.location = authUrl.toString();
-    return;
   },
 
   async search(term) {
