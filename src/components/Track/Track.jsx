@@ -2,6 +2,7 @@ import React from "react";
 import "./Track.css";
 
 function Track({ name, artist, album, track, addTrack, removeTrack, isRemoval }) {
+    console.log("Track recibido:", track);
     const handleClick = () => {
         if (isRemoval) {
             removeTrack(track);
