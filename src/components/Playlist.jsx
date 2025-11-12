@@ -1,34 +1,29 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import Tracklist from "./Tracklist";
 
 function Playlist({ playlistName, setPlaylistName, playlistTracks, removeTrack, savePlaylist }) {
     const [isEditing, setIsEditing] = useState(false);
-    const [tempName, setTempName] = useState(playlistName || "New Playlist");
+    const [tempName, setTempName] = useState(playlistName);
     
-    /*Handles edition mode on title*/
-    const handleTitleClick = useCallback(() => {
+    const handleTitleClick = () => {
         setTempName(playlistName);
         setIsEditing(true);
-    }, [playlistName]);
+    };
 
-    /*Updates name while editing*/
-    const handleInputChange = useCallback((e) => {
+    const handleInputChange = (e) => {
         setTempName(e.target.value);
-    }, []);
+    };
 
-    /*Saves name when exiting input or on enter*/
-    const commitNameChange = useCallback(() => {
-        const finalName = tempName.trim() || "New Playlist";
-        setPlaylistName(finalName);
+    const handleInputBlur = () => {
+        setPlaylistName(tempName || "New Playlist");
         setIsEditing(false);
-    }, [tempName, setPlaylistName]);
+    };
 
-    const handleInputKeyPress = useCallback((e) => {
+    const handleInputKeyPress = (e) => {
         if (e.key === "Enter") {
-            commitNameChange();
+            handleInputBlur();
         }
-     }, [commitNameChange]
-   );
+    };
     
     return (
         <div className="Playlist">
@@ -37,12 +32,11 @@ function Playlist({ playlistName, setPlaylistName, playlistTracks, removeTrack, 
                 autoFocus
                 value={tempName}
                 onChange={handleInputChange}
-                onBlur={commitNameChange}
+                onBlur={handleInputBlur}
                 onKeyDown={handleInputKeyPress}
-                className="Playlist-input"
             />
            ) : (
-            <h2 onClick={handleTitleClick} className="Playlist-title">{playlistName || "New Playlist"}</h2>
+            <h2 onClick={handleTitleClick}>{playlistName}</h2>
            )}
             <Tracklist tracks={playlistTracks} removeTrack={removeTrack} isRemoval={true}/>
             <button onClick={savePlaylist}>Save to Spotify</button>

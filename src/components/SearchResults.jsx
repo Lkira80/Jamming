@@ -1,11 +1,11 @@
 import React from "react";
 import Tracklist from "./Tracklist";
 
-function SearchResults({ searchResults, addTrack }) {
+function SearchResults({ tracks, addTrack }) {
     return (
         <div className="SearchResults">
             <h2>Results</h2>
-            <Tracklist tracks={searchResults} addTrack={addTrack} isRemoval={false} />
+            <Tracklist tracks={tracks} addTrack={addTrack} isRemoval={false} />
         </div>
     );
 }
