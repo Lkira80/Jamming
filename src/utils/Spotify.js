@@ -27,6 +27,7 @@ const Spotify = {
   async getAccessToken() {
     if (accessToken) return accessToken;
 
+    /*Searching if theres a valid token in memory*/
     const storedToken = localStorage.getItem("spotify_access_token");
     const storedExpiry = localStorage.getItem("spotify_token_expiry");
     if (storedToken && Date.now() < storedExpiry) {
@@ -36,10 +37,16 @@ const Spotify = {
       localStorage.removeItem("spotify_access_token");
     }
 
+    /*Check if theres a code in URL*/
     const code = new URLSearchParams(window.location.search).get("code");
     if (code) {
       const verifier = localStorage.getItem("spotify_code_verifier");
+      if(!verifier){
+        console.error("No se encontró code_verifier en localStorage.");
+        return null;
+      }
 
+      /*Changing code for access_token*/
       const body = new URLSearchParams({
         client_id: clientId,
         grant_type: "authorization_code",
@@ -60,6 +67,7 @@ const Spotify = {
         accessToken = data.access_token;
         localStorage.setItem("spotify_access_token", accessToken);
         localStorage.setItem("spotify_token_expiry", Date.now() + data.expires_in * 1000);
+        /*Cleaning URL*/
         window.history.pushState({}, null, redirectUri);
         return accessToken;
       } else {
@@ -68,6 +76,7 @@ const Spotify = {
       }
     }
 
+  if (!localStorage.getItem("spotify_code_verifier")) {
     const verifier = generateRandomString(128);
     const challenge = await sha256(verifier);
     localStorage.setItem("spotify_code_verifier", verifier);
@@ -81,6 +90,8 @@ const Spotify = {
     authUrl.searchParams.append("code_challenge", challenge);
 
     window.location = authUrl.toString();
+    return;
+    }
   },
 
   async search(term) {
