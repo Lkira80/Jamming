@@ -76,6 +76,7 @@ const Spotify = {
       }
     }
 
+  /*If theres no code, generate a new one*/
   if (!localStorage.getItem("spotify_code_verifier")) {
     const verifier = generateRandomString(128);
     const challenge = await sha256(verifier);

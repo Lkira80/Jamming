@@ -15,7 +15,6 @@ function App() {
   useEffect(() => {
     localStorage.removeItem("spotify_access_token");
     localStorage.removeItem("spotify_token_expiry");
-    localStorage.removeItem("spotify_code_verifier");
   }, []);
 
 
