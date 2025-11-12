@@ -1,4 +1,5 @@
 import React from "react";
+import "./App.css";
 
 function Track({ name, artist, album, track, addTrack, removeTrack, isRemoval }) {
     const handleClick = () => {
@@ -11,8 +12,11 @@ function Track({ name, artist, album, track, addTrack, removeTrack, isRemoval })
 
     return (
        <div className="Track">
-        <h3>{name}</h3>
-        <p>{artist} | {album}</p>
+        {track.image && <img src={track.image} alt={album} className="track-image" />}
+        <div className="track-info">
+            <h3>{name}</h3>
+            <p>{artist} | {album}</p>
+        </div>
         <button onClick={handleClick}>{isRemoval ? "-" : "+"}</button>
        </div>
     );

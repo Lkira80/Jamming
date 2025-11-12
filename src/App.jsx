@@ -10,6 +10,12 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [playlistName, setPlaylistName] = useState("New Playlist");
   const [playlistTracks, setPlaylistTracks] = useState([]);
+  const [notification, setNotification] = useState("");
+
+  const showNotification = (message, duration = 3000) => {
+    showNotification(message);
+    setTimeout(() => setNotification(""), duration);
+  };
 
   const addTrack = (track) => {
     if (!playlistTracks.find((t) => t.id === track.id)) {
@@ -22,18 +28,25 @@ function App() {
   };
 
   const handleSearch = async (term) => {
-    console.log("Buscando:", term);
+    if (!term.trim()) {
+      showNotification("Searchbar empty.");
+      return;
+    }
+
     const results = await Spotify.search(term);
-    console.log("Resultados:", results);
     setSearchResults(results);
+    if (results.length === 0) showNotification("No results found.")
 };
 
   const savePlaylist = async () => {
+    if (playlistTracks.length === 0) {
+      showNotification("Cannot save playlist: tracklist is empty.");
+      return;
+    }
     const trackURIs = playlistTracks.map(track => track.uri);
     await Spotify.savePlaylist(playlistName, trackURIs);
 
-    console.log("Playlist saved with tracks:", trackURIs);
-    alert(`Playlist saved with tracks:\n${trackURIs.join("\n")}`);
+    showNotification(`Playlist ${playlistName} saved as ${trackURIs.length} tracks!`);
 
     setPlaylistName("New Playlist");
     setPlaylistTracks([]);
@@ -43,6 +56,7 @@ function App() {
     <div className="App">
       <h1>Jamming</h1>
       <SearchBar onSearch={handleSearch} />
+      {notification && <div className="notification">{notification}</div>}
       <div className="App-content">
         <SearchResults tracks={searchResults} addTrack={addTrack} />
         <Playlist
