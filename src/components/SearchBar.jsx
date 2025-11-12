@@ -24,7 +24,7 @@ function SearchBar({ onSearch }) {
         onChange={handleTermChange}
         onKeyDown={handleKeyPress}
         />
-        <button onClick={search} disabled={term.trim() === ""}>Search</button>
+        <button onClick={search}>Search</button>
        </div>
     );
 }

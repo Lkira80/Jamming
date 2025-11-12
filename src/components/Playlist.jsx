@@ -39,7 +39,7 @@ function Playlist({ playlistName, setPlaylistName, playlistTracks, removeTrack, 
             <h2 onClick={handleTitleClick}>{playlistName}</h2>
            )}
             <Tracklist tracks={playlistTracks} removeTrack={removeTrack} isRemoval={true}/>
-            <button onClick={savePlaylist} disabled={playlistTracks.length === 0}>Save to Spotify</button>
+            <button onClick={savePlaylist}>Save to Spotify</button>
         </div>
     );
 }
