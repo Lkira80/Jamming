@@ -36,9 +36,9 @@ function App() {
 
     if (term.toLowerCase() === lastSearch.toLowerCase()) {
       return;
-    }
-
-    setLastSearch(term);
+    } else {
+      setLastSearch(term)
+    };
 
     const results = await Spotify.search(term);
     setSearchResults(results);
