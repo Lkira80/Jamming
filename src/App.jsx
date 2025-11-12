@@ -13,7 +13,7 @@ function App() {
   const [notification, setNotification] = useState("");
 
   const showNotification = (message, duration = 3000) => {
-    showNotification(message);
+    setNotification(message);
     setTimeout(() => setNotification(""), duration);
   };
 
