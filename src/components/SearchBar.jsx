@@ -8,6 +8,7 @@ function SearchBar({ onSearch }) {
     };
 
     const search = () => {
+        if (term.trim () === "") return;
         onSearch(term);
     };
 
