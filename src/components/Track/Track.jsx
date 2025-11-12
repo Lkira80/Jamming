@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+import "./Track.css";
 
 function Track({ name, artist, album, track, addTrack, removeTrack, isRemoval }) {
     const handleClick = () => {
