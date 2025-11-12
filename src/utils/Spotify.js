@@ -106,6 +106,7 @@ const Spotify = {
     const response = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${token}` },
     });
+    
     const jsonResponse = await response.json();
 
     if (!jsonResponse.tracks) return [];

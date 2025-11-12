@@ -34,6 +34,12 @@ function App() {
       return;
     }
 
+    if (term.toLowerCase() === lastSearch.toLowerCase()) {
+      return;
+    }
+
+    setLastSearch(term);
+
     const results = await Spotify.search(term);
     setSearchResults(results);
     if (results.length === 0) showNotification("No results found.")
