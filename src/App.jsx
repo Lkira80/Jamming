@@ -11,6 +11,7 @@ function App() {
   const [playlistName, setPlaylistName] = useState("New Playlist");
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [notification, setNotification] = useState("");
+  const [lastSearch, setLastSearch] = useState("");
 
   const showNotification = (message, duration = 3000) => {
     console.log("Showing notification:", message);
@@ -35,7 +36,7 @@ function App() {
     }
 
     if (term.toLowerCase() === lastSearch.toLowerCase()) {
-      return;
+      return
     } else {
       setLastSearch(term)
     };
