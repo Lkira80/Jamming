@@ -11,15 +11,10 @@ function App() {
   const [playlistName, setPlaylistName] = useState("New Playlist");
   const [playlistTracks, setPlaylistTracks] = useState([]);
 
-  /*Cleaning old tokens when loading app if expired*/
-  useEffect(() => {
-  const expiry = localStorage.getItem("spotify_token_expiry");
-  if (expiry && Date.now() > expiry) {
-    localStorage.removeItem("spotify_access_token");
-    localStorage.removeItem("spotify_token_expiry");
-  }
-}, []);
-
+  if (!localStorage.getItem("spotify_code_verifier")) {
+  const verifier = Spotify.generateRandomString(128);
+  localStorage.setItem("spotify_code_verifier", verifier);
+}
 
   const addTrack = (track) => {
     if (!playlistTracks.find((t) => t.id === track.id)) {
