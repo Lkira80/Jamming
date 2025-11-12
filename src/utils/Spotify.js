@@ -123,11 +123,20 @@ const Spotify = {
     const token = await this.getAccessToken();
     const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
 
+    /*Check if token is still active*/
     const me = await fetch("https://api.spotify.com/v1/me", { headers });
+    if (!me.ok) {
+      alert("Tu sesión ha expirado o la app ha sido revocada. Por favor vuelve a autorizar.");
+      // Clearing Token and forcing Login
+      accessToken = null;
+      localStorage.removeItem("spotify_access_token");
+      localStorage.removeItem("spotify_token_expiry");
+      window.location.reload(); // Forces to get into AccessToken
+      return;
+  }
+
     const userData = await me.json();
     const user = userData.id;
-
-    
 
     const playlistRes = await fetch(`https://api.spotify.com/v1/users/${user}/playlists`, {
       method: "POST",
