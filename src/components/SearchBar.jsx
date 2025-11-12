@@ -1,29 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
 function SearchBar({ onSearch }) {
     const [term, setTerm] = useState("");
 
-    const handleTermChange = (e) => {
+    /*Memorizes function to avoid repeating innecesarily*/
+    const handleTermChange = useCallback((e) => {
         setTerm(e.target.value);
-    };
+    }, []);
 
-    const search = () => {
-        onSearch(term);
-    };
+    /*Memorizes the search function*/
+    const search = useCallback(() => {
+        if (term.trim() !== "") {
+      onSearch(term);
+    }
+  }, [onSearch, term]);
 
-    const handleKeyPress = (e) => {
+    /*Allows to search on enter key*/
+    const handleKeyPress = useCallback((e) => {
         if (e.key === "Enter") search();
-    };
+       }, [search]
+    );
 
     return (
        <div className="SearchBar">
         <input 
+        type="text"
         placeholder="Enter a song, album or artist" 
         value={term}
         onChange={handleTermChange}
         onKeyDown={handleKeyPress}
         />
-        <button onClick={search}>Search</button>
+        <button className="SearchButton" onClick={search}>Search</button>
        </div>
     );
 }

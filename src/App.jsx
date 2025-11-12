@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import Playlist from "./components/Playlist";
@@ -10,6 +10,14 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [playlistName, setPlaylistName] = useState("New Playlist");
   const [playlistTracks, setPlaylistTracks] = useState([]);
+
+  /*Cleaning old tokens when loading app*/
+  useEffect(() => {
+    localStorage.removeItem("spotify_access_token");
+    localStorage.removeItem("spotify_token_expiry");
+    localStorage.removeItem("spotify_code_verifier");
+  }, []);
+
 
   const addTrack = (track) => {
     if (!playlistTracks.find((t) => t.id === track.id)) {
