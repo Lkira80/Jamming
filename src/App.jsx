@@ -66,7 +66,11 @@ function App() {
       <SearchBar onSearch={handleSearch} />
       {notification && <div className="notification">{notification}</div>}
       <div className="App-content">
-        <SearchResults tracks={searchResults} addTrack={addTrack} />
+        <SearchResults 
+        tracks={searchResults.filter(
+          (track) => !playlistTracks.find((t) => t.id === track.id)
+        )} 
+        addTrack={addTrack} />
         <Playlist
           playlistName={playlistName}
           setPlaylistName={setPlaylistName}

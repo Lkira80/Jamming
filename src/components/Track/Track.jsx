@@ -17,6 +17,15 @@ function Track({ name, artist, album, track, addTrack, removeTrack, isRemoval })
         <div className="track-info">
             <h3>{name}</h3>
             <p>{artist} | {album}</p>
+
+            {/*Preview de 30s*/}
+            {track.preview_url ? (
+                <audio controls src={track.preview_url} className="track-preview">
+                    Your browser does not support the audio element
+                </audio>
+            ) : (
+                <p className="no-preview">No preview available</p>
+            )}
         </div>
         <button onClick={handleClick}>{isRemoval ? "-" : "+"}</button>
        </div>

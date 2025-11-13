@@ -66,3 +66,15 @@
   }
 
 }
+
+.track-preview {
+  margin-top: 0.5rem;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.no-preview {
+  font-size: 0.8rem;
+  color: #bbb;
+  margin-top: 0.5rem;
+}
