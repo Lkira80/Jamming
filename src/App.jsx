@@ -8,8 +8,12 @@ import Spotify from "./utils/Spotify";
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
-  const [playlistName, setPlaylistName] = useState("New Playlist");
-  const [playlistTracks, setPlaylistTracks] = useState([]);
+  const [playlistName, setPlaylistName] = useState(
+    () => sessionStorage.getItem("playlist_name") || "New Playlist"
+  );
+  const [playlistTracks, setPlaylistTracks] = useState(
+    () => JSON.parse(sessionStorage.getItem("playlist_tracks")) || []
+  );
   const [notification, setNotification] = useState("");
   const [lastSearch, setLastSearch] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -52,14 +56,13 @@ function App() {
     /*Saving current search*/
     sessionStorage.setItem("last_search_term", term);
 
-
     try {
-    const results = await Spotify.search(term);
-    setSearchResults(results);
-    if (results.length === 0) showNotification("No results found.")
+      const results = await Spotify.search(term);
+      setSearchResults(results);
+      if (results.length === 0) showNotification("No results found.");
     } catch (error) {
-    console.error("Error searching tracks:", error);
-    showNotification("Error searching tracks. Try again.");
+      console.error("Error searching tracks:", error);
+      showNotification("Error searching tracks. Try again.");
     }
   };
 
@@ -70,42 +73,44 @@ function App() {
       return;
     }
 
-    setIsSaving(true); //starts loading
+    setIsSaving(true);
 
     try {
-    const trackURIs = playlistTracks.map(track => track.uri);
-    await Spotify.savePlaylist(playlistName, trackURIs);
+      const trackURIs = playlistTracks.map((track) => track.uri);
+      await Spotify.savePlaylist(playlistName, trackURIs);
 
-    showNotification(`Playlist "${playlistName}" saved!`);
+      showNotification(`Playlist "${playlistName}" saved!`);
 
     // Clear playlist locally
     setPlaylistName("New Playlist");
-    setPlaylistTracks([]);
-    sessionStorage.removeItem("playlist_tracks");
-    sessionStorage.removeItem("playlist_name");
-    sessionStorage.removeItem("last_search_term");
+      setPlaylistTracks([]);
+      sessionStorage.removeItem("playlist_tracks");
+      sessionStorage.removeItem("playlist_name");
+      sessionStorage.removeItem("last_search_term");
     } catch (error) {
       console.error("Error saving playlist:", error);
       showNotification("Error saving playlist. Try again.");
     } finally {
-      setIsSaving(false); // Hide loading
-  }
-};
+      setIsSaving(false);
+    }
+  };
 
   /*Restoring search after Spotify redirect*/
   useEffect(() => {
     const restoreState = async () => {
-      // Restore playlist
+      // Restore playlist and playlist name
       const savedTracks = sessionStorage.getItem("playlist_tracks");
       const savedName = sessionStorage.getItem("playlist_name");
       if (savedTracks) setPlaylistTracks(JSON.parse(savedTracks));
       if (savedName) setPlaylistName(savedName);
 
-      // Restore search
+      // Restore search term
       const lastTerm = sessionStorage.getItem("last_search_term");
       if (!lastTerm) return;
 
+      // Ensure token is ready
       await Spotify.getAccessToken();
+
       setSearchInput(lastTerm);
       handleSearch(lastTerm);
     };
@@ -139,7 +144,10 @@ function App() {
         />
         <Playlist
           playlistName={playlistName}
-          setPlaylistName={setPlaylistName}
+          setPlaylistName={(name) => {
+            setPlaylistName(name);
+            sessionStorage.setItem("playlist_name", name);
+          }}
           playlistTracks={playlistTracks}
           removeTrack={removeTrack}
           savePlaylist={savePlaylist}
