@@ -25,13 +25,17 @@ function App() {
   /*Adding tracks to playlist*/
   const addTrack = (track) => {
     if (!playlistTracks.find((t) => t.id === track.id)) {
-      setPlaylistTracks([...playlistTracks, track]);
+      const newTracks = [...playlistTracks, track];
+      setPlaylistTracks(newTracks);
+      sessionStorage.setItem("playlist_tracks", JSON.stringify(newTracks));
     }
   };
 
   /*Removing tracks from playlist*/
   const removeTrack = (track) => {
-    setPlaylistTracks(playlistTracks.filter((t) => t.id !== track.id));
+    const newTracks = playlistTracks.filter((t) => t.id !== track.id);
+    setPlaylistTracks(newTracks);
+    sessionStorage.setItem("playlist_tracks", JSON.stringify(newTracks));
   };
 
   /*Search tracks*/
@@ -74,57 +78,65 @@ function App() {
 
     showNotification(`Playlist "${playlistName}" saved!`);
 
-    // Limpiar playlist local
+    // Clear playlist locally
     setPlaylistName("New Playlist");
     setPlaylistTracks([]);
-  } catch (error) {
-    console.error("Error saving playlist:", error);
-    showNotification("Error saving playlist. Try again.");
-  } finally {
-    setIsSaving(false); // oculta pantalla de carga
+    sessionStorage.removeItem("playlist_tracks");
+    sessionStorage.removeItem("playlist_name");
+    sessionStorage.removeItem("last_search_term");
+    } catch (error) {
+      console.error("Error saving playlist:", error);
+      showNotification("Error saving playlist. Try again.");
+    } finally {
+      setIsSaving(false); // Hide loading
   }
 };
 
   /*Restoring search after Spotify redirect*/
   useEffect(() => {
-  const restoreSearch = async () => {
-    const lastTerm = sessionStorage.getItem("last_search_term");
-    if (!lastTerm) return;
+    const restoreState = async () => {
+      // Restore playlist
+      const savedTracks = sessionStorage.getItem("playlist_tracks");
+      const savedName = sessionStorage.getItem("playlist_name");
+      if (savedTracks) setPlaylistTracks(JSON.parse(savedTracks));
+      if (savedName) setPlaylistName(savedName);
 
-    // Waiting to have token
-    await Spotify.getAccessToken();
+      // Restore search
+      const lastTerm = sessionStorage.getItem("last_search_term");
+      if (!lastTerm) return;
 
-    setSearchInput(lastTerm);
-    handleSearch(lastTerm);
+      await Spotify.getAccessToken();
+      setSearchInput(lastTerm);
+      handleSearch(lastTerm);
+    };
 
-    sessionStorage.removeItem("last_search_term");
-  };
-  restoreSearch();
-}, []);
+    restoreState();
+  }, []);
 
   return (
     <div className="App">
       <h1>Jamming</h1>
-      <SearchBar 
-      onSearch={handleSearch} 
-      searchInput={searchInput}
-      setSearchInput={setSearchInput}
+      <SearchBar
+        onSearch={handleSearch}
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
       />
 
       {notification && <div className="notification">{notification}</div>}
 
       {isSaving && (
-      <div className="loading-overlay">
-        <div className="loading-message">Saving playlist...</div>
-      </div>
-    )}
+        <div className="loading-overlay">
+          <div className="loading-message">Saving playlist...</div>
+        </div>
+      )}
 
       <div className="App-content">
-        <SearchResults 
-        tracks={searchResults.filter(
-          (track) => !playlistTracks.find((t) => t.id === track.id)
-        )} 
-        addTrack={addTrack} />
+        <SearchResults
+          tracks={searchResults.filter(
+            (track) => !playlistTracks.find((t) => t.id === track.id)
+          )}
+          addTrack={addTrack}
+        />
         <Playlist
           playlistName={playlistName}
           setPlaylistName={setPlaylistName}
