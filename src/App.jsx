@@ -13,40 +13,53 @@ function App() {
   const [notification, setNotification] = useState("");
   const [lastSearch, setLastSearch] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
+  /*Show notifications*/
   const showNotification = (message, duration = 3000) => {
     console.log("Showing notification:", message);
     setNotification(message);
     setTimeout(() => setNotification(""), duration);
   };
 
+  /*Adding tracks to playlist*/
   const addTrack = (track) => {
     if (!playlistTracks.find((t) => t.id === track.id)) {
       setPlaylistTracks([...playlistTracks, track]);
     }
   };
 
+  /*Removing tracks from playlist*/
   const removeTrack = (track) => {
     setPlaylistTracks(playlistTracks.filter((t) => t.id !== track.id));
   };
 
+  /*Search tracks*/
   const handleSearch = async (term) => {
     if (!term.trim()) {
       showNotification("Searchbar empty.");
       return;
     }
 
-    if (term.toLowerCase() === lastSearch.toLowerCase()) {
-      return;
-    } else {
-      setLastSearch(term);
-    }
+    if (term.toLowerCase() === lastSearch.toLowerCase()) return;
+    setLastSearch(term);
+    setSearchInput(term);
 
+    /*Saving current search*/
+    sessionStorage.setItem("last_search_term", term);
+
+
+    try {
     const results = await Spotify.search(term);
     setSearchResults(results);
     if (results.length === 0) showNotification("No results found.")
-};
+    } catch (error) {
+    console.error("Error searching tracks:", error);
+    showNotification("Error searching tracks. Try again.");
+    }
+  };
 
+  /*Save playlist to Spotify*/
   const savePlaylist = async () => {
     if (playlistTracks.length === 0) {
       showNotification("Cannot save playlist: tracklist is empty.");
@@ -72,10 +85,24 @@ function App() {
   }
 };
 
+  /*Restoring search after Spotify redirect*/
+  useEffect(() => {
+    const lastTerm = sessionStorage.getItem("last_search_term");
+    if (lastTerm) {
+      setSearchInput(lastTerm);
+      handleSearch(lastTerm);
+      sessionStorage.removeItem("last_search_term");
+    }
+  }, []);
+
   return (
     <div className="App">
       <h1>Jamming</h1>
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar 
+      onSearch={handleSearch} 
+      searchInput={searchInput}
+      setSearchInput={setSearchInput}
+      />
 
       {notification && <div className="notification">{notification}</div>}
 
