@@ -119,6 +119,7 @@ const Spotify = {
       image: track.album.images && track.album.images.length
        ? track.album.images[track.album.images.length - 1].url
        : "",
+      preview_url: track.preview_url
     }));
   },
 
