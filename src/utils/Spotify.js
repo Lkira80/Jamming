@@ -102,12 +102,13 @@ const Spotify = {
     const token = await this.getAccessToken();
     if (!token) return [];
 
-    const endpoint = `https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(term)}`;
+    const endpoint = `https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(term)}&market=from_token`;
     const response = await fetch(endpoint, {
       headers: { Authorization: `Bearer ${token}` },
     });
     
     const jsonResponse = await response.json();
+    console.log(jsonResponse.tracks.items.slice(0, 3))
 
     if (!jsonResponse.tracks) return [];
     return jsonResponse.tracks.items.map((track) => ({
