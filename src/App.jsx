@@ -87,13 +87,20 @@ function App() {
 
   /*Restoring search after Spotify redirect*/
   useEffect(() => {
+  const restoreSearch = async () => {
     const lastTerm = sessionStorage.getItem("last_search_term");
     if (lastTerm) {
-      setSearchInput(lastTerm);
-      handleSearch(lastTerm);
-      sessionStorage.removeItem("last_search_term");
+      // Waiting for token to be ready
+      const token = await Spotify.getAccessToken();
+      if (token) {
+        setSearchInput(lastTerm);
+        handleSearch(lastTerm);
+        sessionStorage.removeItem("last_search_term");
+      }
     }
-  }, []);
+  };
+  restoreSearch();
+}, []);
 
   return (
     <div className="App">
