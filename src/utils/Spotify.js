@@ -164,7 +164,7 @@ const Spotify = {
       body: JSON.stringify({ uris }),
     });
 
-    alert(`Playlist "${name}" saved to your Spotify!`);
+    return playlist.id;
   },
 };
 

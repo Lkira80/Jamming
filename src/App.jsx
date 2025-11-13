@@ -55,15 +55,22 @@ function App() {
 
     setIsSaving(true); //starts loading
 
+    try {
     const trackURIs = playlistTracks.map(track => track.uri);
     await Spotify.savePlaylist(playlistName, trackURIs);
 
-    setIsSaving(false); //finishes loading
-    showNotification(`Playlist ${playlistName} saved as ${trackURIs.length} tracks!`);
+    showNotification(`Playlist "${playlistName}" saved!`);
 
+    // Limpiar playlist local
     setPlaylistName("New Playlist");
     setPlaylistTracks([]);
+  } catch (error) {
+    console.error("Error saving playlist:", error);
+    showNotification("Error saving playlist. Try again.");
+  } finally {
+    setIsSaving(false); // oculta pantalla de carga
   }
+};
 
   return (
     <div className="App">
