@@ -1,16 +1,73 @@
-# React + Vite
+# Jamming
+Jamming is a web application that allows to search songs in Spotify, create personalized playlists and save them directly on your Spotify account.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Search songs, albums and artists using the Spotify API.
+- Add or removing songs from a playlist.
+- Save the playlist directly to Spotify.
+- Mantain search and playlist status even after redirects or token updates.
+- Loading screen and notifications to improve user experience.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Demo
 
-## Expanding the ESLint configuration
+You can try the app live here: [https://lkira80.github.io/Jamming/]
+Note that Spotify API only works if email is added into developer user manager for the app.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Installation
+
+Clone this repository:
+
+```bash
+git clone https://github.com/lkira80/Jamming.git
+cd Jamming
+npm install
+npm run dev
+```
+
+---
+
+## Usage
+
+- Enter a song, album or artist in the search bar.
+- Click Search or press Enter.
+- Add songs to your playlist by clicking Add.
+- Rename the playlist if you wish.
+- Click Save to Spotify to save the playlist to your Spotify Account.
+- Note: If this is your first time using the app, Spotify will request authorization to access your account. The app will retain your search and playlist while you complete authorization process.
+
+---
+
+## Tech
+
+- React
+- Vite
+- Javascript
+- Spotify Web API
+- CSS for custom styles
+
+---
+
+# Project structure
+
+Jamming/
+├─ public/                 # Static files (favicon, icons)
+├─ src/
+│  ├─ components/          # React Components: SearchBar, SearchResults, Playlist...
+│  ├─ utils/               # Utils: Spotify API helper
+│  ├─ App.jsx              # Main App component
+│  └─ main.jsx             # Entry point
+├─ package.json
+├─ vite.config.js
+├─ README.md
+└─ ...
+
+---
+
+## License
+
+This project is licensed under the MIT License.
