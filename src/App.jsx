@@ -92,8 +92,7 @@ function App() {
     if (!lastTerm) return;
 
     // Waiting to have token
-    const token = await Spotify.getAccessToken();
-    if (!token) return;
+    await Spotify.getAccessToken();
 
     setSearchInput(lastTerm);
     handleSearch(lastTerm);
