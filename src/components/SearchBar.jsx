@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 
-function SearchBar({ onSearch }) {
+function SearchBar({ onSearch, searchInput, setSearchInput }) {
     const [term, setTerm] = useState("");
 
     const handleTermChange = (e) => {
-        setTerm(e.target.value);
+        setSearchInput(e.target.value);
     };
 
     const search = () => {
-        if (term.trim () === "") return;
-        onSearch(term);
+        if (searchInput.trim () === "") return;
+        onSearch(searchInput);
     };
 
     const handleKeyPress = (e) => {
@@ -20,11 +20,11 @@ function SearchBar({ onSearch }) {
        <div className="SearchBar">
         <input 
         placeholder="Enter a song, album or artist" 
-        value={term}
+        value={searchInput}
         onChange={handleTermChange}
         onKeyDown={handleKeyPress}
         />
-        <button onClick={search} disabled={term.trim() === ""}>Search</button>
+        <button onClick={search} disabled={searchInput.trim() === ""}>Search</button>
        </div>
     );
 }
