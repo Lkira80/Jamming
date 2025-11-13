@@ -89,15 +89,16 @@ function App() {
   useEffect(() => {
   const restoreSearch = async () => {
     const lastTerm = sessionStorage.getItem("last_search_term");
-    if (lastTerm) {
-      // Waiting for token to be ready
-      const token = await Spotify.getAccessToken();
-      if (token) {
-        setSearchInput(lastTerm);
-        handleSearch(lastTerm);
-        sessionStorage.removeItem("last_search_term");
-      }
-    }
+    if (!lastTerm) return;
+
+    // Waiting to have token
+    const token = await Spotify.getAccessToken();
+    if (!token) return;
+
+    setSearchInput(lastTerm);
+    handleSearch(lastTerm);
+
+    sessionStorage.removeItem("last_search_term");
   };
   restoreSearch();
 }, []);
