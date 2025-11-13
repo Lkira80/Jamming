@@ -12,6 +12,7 @@ function App() {
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [notification, setNotification] = useState("");
   const [lastSearch, setLastSearch] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   const showNotification = (message, duration = 3000) => {
     console.log("Showing notification:", message);
@@ -51,9 +52,13 @@ function App() {
       showNotification("Cannot save playlist: tracklist is empty.");
       return;
     }
+
+    setIsSaving(true); //starts loading
+
     const trackURIs = playlistTracks.map(track => track.uri);
     await Spotify.savePlaylist(playlistName, trackURIs);
 
+    setIsSaving(false); //finishes loading
     showNotification(`Playlist ${playlistName} saved as ${trackURIs.length} tracks!`);
 
     setPlaylistName("New Playlist");
@@ -64,7 +69,15 @@ function App() {
     <div className="App">
       <h1>Jamming</h1>
       <SearchBar onSearch={handleSearch} />
+
       {notification && <div className="notification">{notification}</div>}
+
+      {isSaving && (
+      <div className="loading-overlay">
+        <div className="loading-message">Saving playlist...</div>
+      </div>
+    )}
+
       <div className="App-content">
         <SearchResults 
         tracks={searchResults.filter(

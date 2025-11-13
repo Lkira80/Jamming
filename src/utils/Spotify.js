@@ -30,9 +30,16 @@ const Spotify = {
     /*Searching if theres a valid token in memory*/
     const storedToken = localStorage.getItem("spotify_access_token");
     const storedExpiry = localStorage.getItem("spotify_token_expiry");
-    if (storedToken && Date.now() < storedExpiry) {
+    if (storedToken && storedExpiry && Date.now() < parseInt(storedExpiry)) {
       accessToken = storedToken;
       return accessToken;
+    }
+
+    /*Expired token or doesnt exist: clean*/
+    if (accessToken || storedToken || storedExpiry) {
+    accessToken = null;
+    localStorage.removeItem("spotify_access_token");
+    localStorage.removeItem("spotify_token_expiry");
     }
     
     /*Obtaining code from URL*/
@@ -67,8 +74,9 @@ const Spotify = {
 
       if (data.access_token) {
         accessToken = data.access_token;
+        const expiryTimestamp = Date.now() + data.expires_in * 1000;
         localStorage.setItem("spotify_access_token", accessToken);
-        localStorage.setItem("spotify_token_expiry", Date.now() + data.expires_in * 1000);
+        localStorage.setItem("spotify_token_expiry", expiryTimestamp.toString());
         /*Cleaning URL*/
         window.history.replaceState({}, document.title, redirectUri);
         return accessToken;
